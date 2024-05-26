@@ -1,0 +1,50 @@
+from fastapi import APIRouter, Body, Depends, HTTPException, Response, status
+from bson import ObjectId
+
+from monggoDB.config.db import jobs_collection
+from monggoDB.models.common import PyObjectId
+from endpoints.supabase_clients import get_supabase_user
+from monggoDB.models.job import JobCollection, JobModel
+
+
+# Job Router
+job_router = APIRouter()
+
+@job_router.post("/", response_description="Add new job", response_model=JobModel, status_code=status.HTTP_201_CREATED)
+async def create_job(user_id:str = Depends(get_supabase_user), job: JobModel = Body(...)):
+    # Check if the user_id exists
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+
+    job_dict = job.model_dump(by_alias=True, exclude=["id"])
+    job_dict["user_id"] = user_id 
+
+    new_job = await jobs_collection.insert_one(job_dict)
+    created_job = await jobs_collection.find_one({"_id": new_job.inserted_id})
+    return created_job
+
+
+@job_router.get("/", response_description="List all jobs for a user", response_model=JobCollection, status_code=status.HTTP_200_OK)
+async def get_jobs_for_user(user_id:str = Depends(get_supabase_user)):
+
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+
+    jobs = await jobs_collection.find({"user_id": user_id}).to_list(100)
+    return JobCollection(jobs=jobs)
+
+
+@job_router.delete("/{job_id}", response_description="Delete a job", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_job(job_id: PyObjectId, user_id: str = Depends(get_supabase_user)):
+    # Find the job to verify ownership
+    job = await jobs_collection.find_one({"_id": job_id, "user_id": ObjectId(user_id)})
+    
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found or you do not have permission to delete this job")
+    
+    delete_result = await jobs_collection.delete_one({"_id": job_id})
+    
+    if delete_result.deleted_count == 1:
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    
+    raise HTTPException(status_code=404, detail="Job not found")
