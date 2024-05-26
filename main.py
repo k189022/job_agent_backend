@@ -1,15 +1,12 @@
 from fastapi import FastAPI, Request
 # from mySQL.config.db import engine
 from fastapi.middleware.cors import CORSMiddleware
-from routers.agent import agent_router as AgentRouter
-from routers.monggo.user import user_router
-from routers.monggo.job import job_router
-from routers.monggo.motivation import motivation_letter_router
+from src.routers.agent import agent_router as AgentRouter
+from src.routers.resume import resume_router
+from src.routers.job import job_router
+from src.routers.motivation import motivation_letter_router
 import sys
 import os
-# from mySQL.models import job as jobModel
-# from mySQL.config.db import Base
-
 
 
 # sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -44,7 +41,7 @@ app.add_middleware(
 
 app.include_router(AgentRouter, prefix='/agent')
 
-app.include_router(user_router, prefix="/users", tags=["users"])
+app.include_router(resume_router, prefix="/resume", tags=["users"])
 app.include_router(job_router, prefix="/jobs", tags=["jobs"])
 app.include_router(motivation_letter_router, prefix="/motivation_letters", tags=["motivation_letters"])
 

@@ -6,7 +6,6 @@ from src.crews.jobSearchCrew import JobCrew
 from src.crews.motivationLetterCrew import MotivationLetterCrew
 from src.utils.fileManagement import FileManagement
 from src.utils.data import Data
-import requests
 
 load_dotenv()
 
@@ -23,7 +22,7 @@ async def run_agent(user_id):
     cv_file_path = '.src/cv_summary.md'
     # cv_details = FileManagement.file_read(cv_file_path)
 
-    # JobCrew().crew(lebenslauf=lebenslauf).kickoff()
+    JobCrew().crew(lebenslauf=lebenslauf).kickoff()
 
     
     job_file_path = './'
