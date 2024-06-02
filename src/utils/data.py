@@ -1,6 +1,9 @@
 import httpx
 import asyncio
 
+from src.monggoDB.models.job import JobModel
+from src.routers.job import create_job
+
 class Data:
     @staticmethod
     async def get(url):
@@ -17,17 +20,10 @@ class Data:
                 print(f"An error occurred: {str(e)}")
 
     @staticmethod
-    async def post(url, json, user_id):
-        print("post success")
-        async with httpx.AsyncClient() as client:
-            try:
-                response = await client.post(url, json=json, user_id=user_id)
-                print(response.status_code)
-                if response.status_code == 201:
-                    print("Job details saved to database successfully!")
-                else:
-                    print(f"Failed to save job details. Status code: {response.status_code}")
-                    print(json)
-            except httpx.RequestError as e:
-                print(f"An error occurred: {str(e)}")
-                print(json)
+    async def post(json, user_id):
+        try:
+            await create_job(user_id, json)
+            print("Job details saved to database successfully!")
+
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")

@@ -1,9 +1,7 @@
 from crewai import Task
-# from config.schema import JobList
 from textwrap import dedent
-from crewai_tools import SerperDevTool, ScrapeWebsiteTool
-
-# from tools.search_tools import SearchTools
+from src.config.schema import JobList
+from src.tools.exa_tools import ExaSearchToolset
 
 class JobSearchTask:
 
@@ -37,29 +35,26 @@ class JobSearchTask:
     def job_search_task(self, agent):
         return Task(
             description=dedent(f"""\
-                    Search in google the relevat job based on the candidate's profile and the job titel in glassdoor
-                    Do not make up anything, just give the result based on search engine"""),
+                    Search in google the relevat job based on the candidate's profile and the job titel in linkedIn
+                    Do not make up anything, just give the result based on search engine
+                    chose maximum 3 url that closest to the job titel as the output"""),
             expected_output=dedent("""\
-                    The list of URL and job title of the job"""),
+                    Maximum 3 list of URL and job title of the job"""),
             agent=agent,
-            # human_input=True,
-            # tools=SearchTools.tools(),
-            # output_json=JobList,
-            # output_file="Job_details.json", 
         )
     
-    def glassdoor_scrapper_task(self, agent):
+    def glassdoor_scrapper_task(self, agent, user_id):
         return Task(
-            description=dedent(f"""\
-                    Use the scrapper tools to get the list of the open job for each url and job_title from `job search` as the query.
+            description=dedent("""\
+                    Use the scrapper tools to get the list of the open job for each url from `job search` as the query.
+                    chose css tag wisely, that you can the list of the jobs.
                     If you get more than one recomendation url, Pass one by one of url.
-                    Do not make up anything, give the result based on the list of the given website"""),
+                    Do not make up anything, give the result based on the list of the given website."""),
             expected_output=dedent("""\
                     The list of relevant job that allign with the job title"""),
             agent=agent,
-            # human_input=True,
-            # tools=SearchTools.tools(),
-            # output_json=JobList,
-            # output_file="Job_details.json", 
+            output_json=JobList,
+            # tools = ExaSearchToolset.tools_get_details(),
+            output_file= "job.json"
         )
     

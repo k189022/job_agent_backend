@@ -10,3 +10,8 @@ src/data
 *.pyd
 
 ./src/db
+test_tools.py
+text_scraper.py
+linked_scrapper.py
+job.json
+cv_summary.md

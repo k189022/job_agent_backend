@@ -22,6 +22,7 @@ def get_supabase_user(authorization: str = Header(...)):
         raise HTTPException(status_code=401, detail="Invalid authorization scheme.")
     
     token = authorization.split(" ")[1]
+    # print(token)
     user_id = None
     try:
         response = supabase.auth.get_user(token)
@@ -31,7 +32,10 @@ def get_supabase_user(authorization: str = Header(...)):
             raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Authentication error: {str(e)}")
+    # print(f"User_id: {user_id}")
     return user_id
+
+
 
 # result = get_supabase_user(hardcode_token)
 # print(result)

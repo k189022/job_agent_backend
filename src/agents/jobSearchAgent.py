@@ -1,6 +1,5 @@
 from textwrap import dedent
 from src.tools.exa_tools import ExaSearchToolset
-from src.tools.search_tools import SearchTools
 from crewai import Agent
 import os
 from dotenv import load_dotenv
@@ -40,8 +39,7 @@ class JobSearchAgent:
                 You excel at analyzing the summary of work experience and skills and Identifying the job titles that are most suitable for 
                 the candidate. Please make sure to pay extra attention to the recent work experiences and title of the most recent job. 
             """),
-            memory=False, 
-            # tools=ExaSearchToolset.tools_job_search(),
+            memory=False,
             allow_delegation=False,
             verbose=True
         )
@@ -55,24 +53,20 @@ class JobSearchAgent:
                 You excel in navigating the complex job market, adept at pinpointing and summarizing relevant job opportunities. 
                 Your expertise lies in matching these opportunities with candidate profiles meticulously, focusing on perfect job for the candidate"""),
             memory=True,
-            # tools=ExaSearchToolset.tools_job_search(),
-            # tools=[SearchTools.open_page, SearchTools.search_internet],
             tools=[Tools.search_tool],
             verbose=True
         )
     
     def glassdoor_scrapper_agent(self):
         return Agent(
-            role='Glassdoor scrapper',
-            goal="Identify and summarize job openings from glassdoor based on job search given url.",
+            role='Website scrapper',
+            goal="Identify and summarize job openings from website based on job search given url.",
             backstory=dedent("""\
                 You excel in navigating the complex job market, adept at pinpointing and summarizing relevant job opportunities. 
                 Your expertise lies in matching these opportunities with candidate profiles meticulously, focusing on delivering 
                 a curated list high-quality job openings."""),
             memory=True,
             allow_delegation=False,
-            # tools=ExaSearchToolset.tools_job_search(),
-            # tools=[SearchTools.open_page, SearchTools.search_internet],
-            tools=[Tools.glassdoor_tool],
+            # tools=[Tools.selenium_tool],
             verbose=True
         )

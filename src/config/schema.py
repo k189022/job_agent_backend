@@ -2,8 +2,9 @@ from pydantic import BaseModel
 
 
 class JobList(BaseModel):
-    job_title: str
-    company_name: str
+    title: str
+    company: str
+    location: str
     description: str
-    requirements: str
-    skils:str
+    skills: str
+    url: str

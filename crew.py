@@ -22,15 +22,17 @@ async def run_agent(user_id):
     cv_file_path = '.src/cv_summary.md'
     # cv_details = FileManagement.file_read(cv_file_path)
 
-    JobCrew().crew(lebenslauf=lebenslauf).kickoff()
+    JobCrew().crew(lebenslauf=lebenslauf, user_id=user_id).kickoff()
 
     
-    job_file_path = './'
-    job_urls = FileManagement.read_all_json_from_folder(job_file_path)
-    job= job_urls[0]
-    print (job)
+    # job_file_path = './src/'
+    # job_urls = FileManagement.read_all_json_from_folder(job_file_path)
 
-    await Data.post(url, json=job, user_id=user_id)
+    # print("Run is running")
+    # print (job)
+    # for job in job_urls:
+    #     await Data.post(json=job, user_id=user_id)
+
 
     # num = 0
     # for job_url in job_urls:
