@@ -48,7 +48,7 @@ async def create_template(request: Request, user_id:str = Depends(get_supabase_u
 
 @template_router.get("/", response_description="List all jobs for a user", response_model=TemplateCollection, status_code=status.HTTP_200_OK)
 # async def get_jobs_for_user(user_id:str = Depends(get_supabase_user)):
-async def get_jobs_for_user(user_id = user_id):
+async def get_template_for_user(user_id):
 
     if not user_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")

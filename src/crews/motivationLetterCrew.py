@@ -21,22 +21,21 @@ class MotivationLetterCrew:
         self.motivation_editor_agent = agents.motivation_letter_editor_agent()
         
 
-    def crew(self, template, job_details, number, lebenslauf):
+    def crew(self, template, job_details, user_id, job_id, lebenslauf):
         """Creates the crew to handle all job application-related tasks"""
         # Initialize tasks
         # cv_analyst = tasks.cv_analyst_task(self.cv_analyst_agent, lebenslauf=lebenslauf)
         job_details = tasks.job_details(self.job_details, job_details= job_details)
         motivation_writer = tasks.motivation_letter_writter_task(self.motivation_writer_agent, template=template, cv_details=lebenslauf)
-        motivation_editor = tasks.motivation_letter_editor_task(self.motivation_editor_agent, number=number)
+        motivation_editor = tasks.motivation_letter_editor_task(self.motivation_editor_agent)
 
         # Set the context of the task
         motivation_writer.context = [job_details]
         motivation_editor.context =[motivation_writer]
 
         return Crew(
-            agents=[self.motivation_editor_agent, self.motivation_writer_agent],
-            tasks=[motivation_writer, motivation_editor],
+            agents=[self.job_details,self.motivation_editor_agent, self.motivation_writer_agent],
+            tasks=[job_details, motivation_writer, motivation_editor],
             process=Process.sequential,
             verbose=True
-
         )

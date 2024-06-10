@@ -42,8 +42,6 @@ class FileManagement:
             if os.path.exists(file_path):
                 with open(file_path, 'r') as file:
                     contents = file.read()
-                # print(contents)
-                # print("File read successfully.")
                 
                 return contents
             else:

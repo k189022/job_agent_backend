@@ -1,6 +1,7 @@
 from crewai import Task
 from textwrap import dedent
-from src.config.schema import JobList
+from src.config.schema import JobDeteils
+from src.tools.tools import Tools
 
 class MotivationLetterTask():
     # def cv_analyst_task(self, agent, lebenslauf):
@@ -20,33 +21,37 @@ class MotivationLetterTask():
     def job_details(self, agent, job_details):
         return Task(
             description=dedent(f"""\
-                    Use the tools to gathering the information for this {job_details} position. Extract valueable clearly and 
-                    sumerize the information and put it as bullet point in the Json List"""),
+                    Use the tools to gathering the information for this {job_details} position, Focusing on Jobs description,
+                    Skills needed, job title, and the company name. Extract valueable clearly and 
+                    try to know what the company does for description and sumerize the information
+                    and put it as bullet point in the Json List"""),
             expected_output=dedent("""\
                     A JSON-formatted list of job openings job details. Each entry should include job title, 
                     company name, job description, and specific requirements, skill that needed."""),
             agent=agent,
-            output_json= JobList
+            # tools= Tools.selenium_tool,
+            output_json= JobDeteils
         )
     
     
     def motivation_letter_writter_task(self, agent, template, cv_details):
         return Task(
             description=dedent(f"""\
-                    Create the motivation letter that relevant to the job, with the details form `job_details`. 
-                    If template available, use this Template {template} to generate the motivation letter, dont copy the content like the job position and requirements, 
-                    but USE SIMILAR TONE AND SIMILAR STYLE from that template.
-                    Use the tools to open this job position, and gather the specific infomation for the motivation letter. 
+                    Make sure that you have valid information about Job title, Company name, jobs description and skills form `job details`
+                    Create the motivation letter that relevant to that job.
+                    Use this Template {template} to generate the motivation letter, dont copy the content like the job position and requirements, 
+                    but USE SIMILAR TONE AND SIMILAR STYLE from that template, always use same language as the template.
                     The motivation letter should reflect the job's requirements AND the applicant's relevant qualifications as outlined in their CV,
-                    check in this CV {cv_details} if any relevant skills and experience for this specific job, and include it if you find any. 
-                    Ensure that each letter is specific to the job position, incorporating the correct company name, job title, and job requirements. 
-                    Additionally, rewrite any URLs related to the job position to enhance sorting and relevance."""),
+                    check in this CV {cv_details} if any relevant skills and experience for this specific job, and include it if you find any,
+                    and if the skill in job requierement not in the candidates profile, put it in the way that candidate eager to learn this skills,
+                    Also dont forget mention what the company does and why the candidate fit for this position for the goal of company growth.
+                    If you find any skills and any experience from candidat that fit with job description, make sure you included it in this cover letter"""),
             expected_output= dedent("""\
                     Customized motivation letters that align the applicant's qualifications with the requirements of the job opening."""),
             agent = agent,
         )
     
-    def motivation_letter_editor_task(self, agent, number):
+    def motivation_letter_editor_task(self, agent):
         return Task(
             description=dedent(f"""\
                     Review and revise the motivation letter generated in the 'write_motivation_letter' task. 
@@ -55,6 +60,7 @@ class MotivationLetterTask():
             expected_output= dedent("""\
                     Refined and personalized motivation letters that effectively relate the applicant's qualifications to the job position, with a natural and human-like tone."""),
             agent = agent,
-            output_file = f"motivation_letter_{number}.md"
+
+            output_file = f"motivation_letter.md"
         )
     

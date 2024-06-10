@@ -31,8 +31,8 @@ class MotivationLetterAgent():
                 acurated linfomation on that job posting."""),
             # memory=True,
             # tools=ExaSearchToolset.tools_job_search(),
-            tools = [Tools.search_tool, Tools.scrape_tool],
-            # tools = [Tools.scrape_tool, Tools.selenium_tool],
+            # tools = [Tools.search_tool, Tools.scrape_tool],
+            tools = [Tools.selenium_tool],
             verbose=True
         )
     

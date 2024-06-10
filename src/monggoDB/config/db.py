@@ -5,6 +5,7 @@ import motor.motor_asyncio
 load_dotenv()
 
 
+
 MONGODB_URL="mongodb://localhost:27017/job_agent"
 
 
@@ -15,4 +16,5 @@ db = client.job_agent
 resume_collection = db["resume"]
 template_collection = db["template"]
 jobs_collection = db["jobs"]
+motivation_collection = db["motivation"]
 

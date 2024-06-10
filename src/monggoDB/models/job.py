@@ -32,4 +32,4 @@ class JobModel(BaseModel):
     )
 
 class JobCollection(BaseModel):
-    jobs: List[JobModel]  # Correctly annotate with a type
+    jobs: List[JobModel]

@@ -26,9 +26,6 @@ async def create_job(user_id, job: JobModel = Body(...)):
 
     job_dict["user_id"] = user_id
 
-    # job_dict = job.model_dump(by_alias=True, exclude=["id"])
-    # job_dict["user_id"] = user_id 
-
     new_job = await jobs_collection.insert_one(job_dict)
     created_job = await jobs_collection.find_one({"_id": new_job.inserted_id})
     return created_job

@@ -8,3 +8,9 @@ class JobList(BaseModel):
     description: str
     skills: str
     url: str
+
+class JobDeteils(BaseModel):
+    title: str
+    company: str
+    description: str
+    skills: str

@@ -31,16 +31,16 @@ app.add_middleware(
 )
 
 
-@app.middleware("http")
-async def log_requests(request: Request, call_next,):
-    print(f"Request URL: {request.url}")
-    print(f"Request Headers: {request.headers}")
-    body = await request.body()  # read body to bytes
-    if body:
-        # If body is not empty, convert from bytes to string for printing
-        print(f"Request Body: {body}")
-    response = await call_next(request)
-    return response
+# @app.middleware("http")
+# async def log_requests(request: Request, call_next,):
+#     print(f"Request URL: {request.url}")
+#     print(f"Request Headers: {request.headers}")
+#     body = await request.body()  # read body to bytes
+#     if body:
+#         # If body is not empty, convert from bytes to string for printing
+#         print(f"Request Body: {body}")
+#     response = await call_next(request)
+#     return response
 
 
 
